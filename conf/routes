@@ -5,7 +5,7 @@
 # An example controller showing a sample home page
 GET     /                           controllers.HomeController.index
 # An transfer controller
-GET     /transfer                   controllers.TransferController.transfer
+POST     /transfer                   controllers.TransferController.transfer
 # An example controller showing how to use dependency injection
 GET     /count                      controllers.CountController.count
 # An example controller showing how to write asynchronous code
