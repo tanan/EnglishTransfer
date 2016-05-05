@@ -5,6 +5,8 @@ import javax.inject._
 import play.api.data.Form
 import play.api.mvc._
 import play.api.data.Forms._
+
+import scala.collection.immutable.ListMap
 import scala.io._
 
 /**
@@ -22,10 +24,10 @@ class TransferController @Inject() extends Controller {
     }
     else {
       val html = Source.fromURL(data.get.toString).mkString
-      val wordlist = html.split(" ")
-      val s = wordlist.filter(p => wordlist.count(_ == p) == 1)
-      val l = s.filter(p => p.matches("^[a-z]{3,}$"))
-      Ok(l.mkString("\n"))
+      val words = html.split(" ").filter(p => p.matches("^[a-z]{4,}$")).groupBy(f => f).map{case (key, value) => (key, value.length)}
+      val sortWords = ListMap(words.toSeq.sortWith(_._2 > _._2):_*)
+      val filterWords = sortWords.filter(p => p._2 > 3)
+      Ok(views.html.transfer(filterWords))
     }
   }
 }
